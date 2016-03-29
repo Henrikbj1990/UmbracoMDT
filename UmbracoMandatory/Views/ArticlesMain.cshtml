@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "Master.cshtml";
+}
+
+<h1>@Umbraco.Field("pageName")</h1>
+	
+	<p>List of articles:</p>
+		<ul>
+		@foreach(var articleItem in CurrentPage.Children)
+		{
+			<li><a href="@articleItem.Url">@articleItem.Name</a></li>	
+		}
+
+	</ul>
+<p>@Umbraco.Field("articlesBodyText")</p>
