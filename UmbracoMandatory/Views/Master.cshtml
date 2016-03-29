@@ -2,6 +2,9 @@
 @{
     Layout = null;
 }
+@{ var root = CurrentPage.AncestorOrSelf(1); }
+@{ var articles = @Umbraco.Content(1065);}
+@{ var projects = @Umbraco.Content(1069);}
 <!doctype html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
@@ -16,23 +19,75 @@
 	<meta name="keywords" content="@Umbraco.Field("metaKeywords")">
 
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-
-	<link rel="stylesheet" href="css/style.css">
+    
+	<link rel="stylesheet" href="../css/style.css">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/jquery-2.2.0.min.js"></script>
 </head>
-	<nav class="navbar navbar-default">
-  		<div class="container-fluid">
-    		<div class="navbar-header">
-				
-				@Umbraco.RenderMacro("mainMenu")
-				<div id="logo">@Umbraco.Field("logo")</div>
-			</div>
-  		</div>
-	</nav>
 <body>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Aarhus Web Dev Corp</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    @foreach (var menuItem in root.Children.Where("Visible").OrderBy("CreateDate desc")) {
+                    <li class="@(menuItem.IsAncestorOrSelf(CurrentPage) ? " active" : null)">
+                        <a href="@menuItem.Url">@menuItem.Name</a>
+                    </li>
+                    }
+                    <li class="dropdown">
+                        <a href="/articles" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Articles<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            @{
+                            var Articles = CurrentPage.Site().FirstChild("ArticlesMain").Children.Where("Visible").OrderBy("Name");
+                            }
+
+                            @foreach(var item in Articles){
+                            <li>
+                                <a href="@item.Url">@item.Name</a>
+                            </li>
+                            }
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="/projects" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @{
+                            var Projects = CurrentPage.Site().FirstChild("ProjectsMain").Children.Where("Visible").OrderBy("Name");
+                            }
+                            @foreach(var item in Projects){
+                                if(item.projectStatus.Equals(9)){
+                                <li>
+                                    <a href="@item.Url">@item.Name</a>
+                                </li>
+                                }
+                            }
+                        </ul>
+                    </li>
+                    <li>
+                        @if (Members.GetCurrentLoginStatus().IsLoggedIn) {
+                            <a href="/login">@Members.GetCurrentLoginStatus().Name</a>
+                            }
+                            else {
+                            <a href="/login">Login</a>
+                            }
+</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 	<div id="container">
 		@RenderBody()
 	</div>
@@ -42,5 +97,7 @@
 	</footer>
 	
 </body>
-	
+                       <script src="../Scripts/bootstrap.min.js"></script>
+                       <script src="../Scripts/jquery-2.2.0.min.js"></script>
+                       <script src="../Scripts/scripts.js"></script>
 	
