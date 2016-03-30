@@ -2,4 +2,16 @@
 @{
     Layout = "Master.cshtml";
 }
+@{ var newProjects = @Umbraco.Content(1069).Children().Where(("projectStatus.Contains(\"9\")")).OrderBy("CreateDate desc").Take(3);}
+
+<h1>Home</h1>
 	<p>@Umbraco.Field("mainContent")</p>
+
+	@foreach(var item in newProjects){
+
+		<li>
+			<a href="@item.Url">@item.Name</a>
+		</li>
+}
+	
+	

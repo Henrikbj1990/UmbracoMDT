@@ -6,13 +6,10 @@
 @{ var articles = @Umbraco.Content(1065);}
 @{ var projects = @Umbraco.Content(1069);}
 <!doctype html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>@Umbraco.Field("pageName")</title>
 	<meta name="description" content="@Umbraco.Field("metaDescription")">
@@ -39,7 +36,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    @foreach (var menuItem in root.Children.Where("Visible").OrderBy("CreateDate desc")) {
+                    @foreach (var menuItem in root.Children.Where("Visible").OrderBy("Name")) {
                     <li class="@(menuItem.IsAncestorOrSelf(CurrentPage) ? " active" : null)">
                         <a href="@menuItem.Url">@menuItem.Name</a>
                     </li>
@@ -88,7 +85,7 @@
             </div>
         </div>
     </nav>
-	<div id="container">
+	<div class="container">
 		@RenderBody()
 	</div>
 	
@@ -97,7 +94,8 @@
 	</footer>
 	
 </body>
-                       <script src="../Scripts/bootstrap.min.js"></script>
-                       <script src="../Scripts/jquery-2.2.0.min.js"></script>
-                       <script src="../Scripts/scripts.js"></script>
+                       
+                    <script src="../Scripts/jquery-2.2.0.min.js"></script>
+					<script src="../Scripts/bootstrap.min.js"></script>
+                    <script src="../Scripts/scripts.js"></script>
 	
