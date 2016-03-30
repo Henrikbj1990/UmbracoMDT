@@ -31,7 +31,7 @@ namespace UmbracoMandatory.Controllers
                 smtp.EnableSsl = true;
                 smtp.Host = "smtp.gmail.com";
                 smtp.Port = 587;
-                smtp.Credentials = new System.Net.NetworkCredential("henrikbj1990@gmail.com", "hbj270590");
+                smtp.Credentials = new System.Net.NetworkCredential("henrikbj1990@gmail.com", "nope");
                 smtp.EnableSsl = true;
                 // send mail
                 smtp.Send(message);
