@@ -239,4 +239,3 @@ C:\Users\Henrik\Documents\Visual Studio 2015\Projects\UmbracoMDT\UmbracoMandator
 C:\Users\Henrik\Documents\Visual Studio 2015\Projects\UmbracoMDT\UmbracoMandatory\obj\Debug\UmbracoMandatory.csproj.App.config
 C:\Users\Henrik\Documents\Visual Studio 2015\Projects\UmbracoMDT\UmbracoMandatory\obj\Debug\UmbracoMandatory.dll
 C:\Users\Henrik\Documents\Visual Studio 2015\Projects\UmbracoMDT\UmbracoMandatory\obj\Debug\UmbracoMandatory.pdb
-C:\Users\Henrik\Documents\Visual Studio 2015\Projects\UmbracoMDT\UmbracoMandatory\obj\Debug\UmbracoMandatory.csprojResolveAssemblyReference.cache
