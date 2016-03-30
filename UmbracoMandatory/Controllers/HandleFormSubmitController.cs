@@ -19,6 +19,16 @@ namespace UmbracoMandatory.Controllers
 
             if (!ModelState.IsValid) { return CurrentUmbracoPage(); }
 
+            IContent message = Services.ContentService.CreateContent(model.Subject, CurrentPage.Id, "Message");
+            message.SetValue("name", model.Name);
+            message.SetValue("email", model.Email);
+            message.SetValue("subject", model.Subject);
+            message.SetValue("message", model.Message);
+
+            Services.ContentService.Save(message);
+            TempData["success"] = true;
+
+            /*
             MailMessage message = new MailMessage();
             message.To.Add("henrikbj1990@hotmail.com");
             message.Subject = model.Subject;
@@ -36,7 +46,8 @@ namespace UmbracoMandatory.Controllers
                 // send mail
                 smtp.Send(message);
                 TempData["success"] = true;
-            }
+            }*/
+
 
             return RedirectToCurrentUmbracoPage();
         }
