@@ -26,6 +26,10 @@ body {
     vertical-align: middle;
 }
 
+.profile {
+	padding-top:10px;	
+}
+
 .footer {
 	position: absolute;
 	bottom: 0;
