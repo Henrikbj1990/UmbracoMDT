@@ -3,13 +3,20 @@
     Layout = "Master.cshtml";
 }
 <h1>@Umbraco.Field("pageName")</h1>
+	<p>@Umbraco.Field("projectsBodyText")</p>
+	@foreach (var page in CurrentPage.Children.OrderBy("CreateDate desc"))
+{
+    var isProtected = umbraco.library.IsProtected(page.Id, page.path);
+    var loginAccess = umbraco.library.IsProtected(page.id, page.path) && umbraco.library.HasAccess(page.id, page.path);
+    if (!isProtected || loginAccess)
+    {
+        <div>
+            <h3>@page.Name</h3>
+			<h5>Created: @page.CreateDate.ToString("MM/dd-yyyy HH:mm")</h5>
+            <p>Status: @umbraco.library.GetPreValueAsString(page.projectStatus)</p>
+			<a href="@page.Url" class="btn btn-primary">Læs mere</a>
+        </div>
+				<br>
+    }
+}
 	
-	<p>List of projects:</p>
-		<ul>
-		@foreach(var projectItem in CurrentPage.Children)
-		{
-			<li><a href="@projectItem.Url">@projectItem.Name</a></li>	
-		}
-
-	</ul>
-<p>@Umbraco.Field("projectsBodyText")</p>

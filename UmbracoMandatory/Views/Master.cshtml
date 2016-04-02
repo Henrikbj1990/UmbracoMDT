@@ -7,96 +7,101 @@
 @{ var projects = @Umbraco.Content(1069);}
 <!doctype html>
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@Umbraco.Field("pageName")</title>
+    <meta name="description" content="@Umbraco.Field("metaDescription")">
+    <meta name="keywords" content="@Umbraco.Field("metaKeywords")">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 
-	<title>@Umbraco.Field("pageName")</title>
-	<meta name="description" content="@Umbraco.Field("metaDescription")">
-	<meta name="keywords" content="@Umbraco.Field("metaKeywords")">
-
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-    
-	<link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="~/css/style.css">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-
 </head>
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/">Aarhus Web Dev Corp</a>
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
+    <div id="wrapper">
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Aarhus Web Dev Corp</a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        @foreach (var menuItem in root.Children.Where("Visible").OrderBy("CreateDate desc"))
+                        {
+                            var isProtected = umbraco.library.IsProtected(menuItem.id, menuItem.path);
+                            var loginAccess = umbraco.library.IsProtected(menuItem.id, menuItem.path) && umbraco.library.HasAccess(menuItem.id, menuItem.path);
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    @foreach (var menuItem in root.Children.Where("Visible").OrderBy("Name")) {
-                    <li class="@(menuItem.IsAncestorOrSelf(CurrentPage) ? " active" : null)">
-                        <a href="@menuItem.Url">@menuItem.Name</a>
-                    </li>
-                    }
-                    <li class="dropdown">
-                        <a href="/articles" class="dropdown-toggle" onclick="window.location.href='/articles'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Articles<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                            if (!isProtected || loginAccess)
+                            {
 
-                            @{
-                            var Articles = CurrentPage.Site().FirstChild("ArticlesMain").Children.Where("Visible").OrderBy("Name");
-                            }
-
-                            @foreach(var item in Articles){
-                            <li>
-                                <a href="@item.Url">@item.Name</a>
-                            </li>
-                            }
-
-                        </ul>
-                    </li>
-
-                    <li class="dropdown">
-                        <a href="/projects" class="dropdown-toggle" onclick="window.location.href='/projects'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            @{
-                            var Projects = CurrentPage.Site().FirstChild("ProjectsMain").Children.Where("Visible").OrderBy("Name");
-                            }
-                            @foreach(var item in Projects){
-                                if(item.projectStatus.Equals(9)){
-                                <li>
-                                    <a href="@item.Url">@item.Name</a>
+                                <li class="@(menuItem.IsAncestorOrSelf(CurrentPage) ? " active" : null)">
+                                    <a href="@menuItem.Url">@menuItem.Name</a>
                                 </li>
+                            }
+                        }
+                        <li class="dropdown">
+                            <a href="/articles" class="dropdown-toggle" onclick="window.location.href='/articles'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Articles<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @{
+                                    var Articles = CurrentPage.Site().FirstChild("ArticlesMain").Children.Where("Visible").OrderBy("Name");
                                 }
+                                @foreach (var item in Articles)
+                                {
+                                    <li>
+                                        <a href="@item.Url">@item.Name</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="/projects" class="dropdown-toggle" onclick="window.location.href='/projects'" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Projects<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                @{
+                                    var Projects = CurrentPage.Site().FirstChild("ProjectsMain").Children.Where("Visible").OrderBy("Name");
+                                }
+                                @foreach (var children in Projects)
+                                {
+                                    var isChildProtected = umbraco.library.IsProtected(children.Id, children.path);
+                                    var loginChildAccess = umbraco.library.IsProtected(children.id, children.path) && umbraco.library.HasAccess(children.id, children.path);
+                                    if (!isChildProtected || loginChildAccess)
+                                    {
+                                        <li>   <a href="@children.Url">@children.Name</a></li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                        <li>
+                            @if (Members.GetCurrentLoginStatus().IsLoggedIn)
+                            {
+                                <a class="pull-right" href="/login">@Members.GetCurrentLoginStatus().Name</a>
                             }
-                        </ul>
-                    </li>
-                    <li>
-                        @if (Members.GetCurrentLoginStatus().IsLoggedIn) {
-                            <a class="pull-right" href="/login">@Members.GetCurrentLoginStatus().Name</a>
+                            else
+                            {
+                                <a class="right" href="/login">Login</a>
                             }
-                            else {
-                            <a class="right" href="/login">Login</a>
-                            }
-</li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
+        </nav>
+        <div class="container content">
+            @RenderBody()
         </div>
-    </nav>
-	<div class="container">
-		@RenderBody()
-	</div>
-	<hr>
-	<footer>
-		<p class="footer">Aarhus Web Development Corporation (R) - 2016 </p>
-	</footer>
-	
+        <footer class="footer">
+            <p class="text-muted">Aarhus Web Development Corporation © - 2016 </p>
+        </footer>
+    </div>
 </body>
-                       
-                    <script src="../Scripts/jquery-2.2.0.min.js"></script>
-					<script src="../Scripts/bootstrap.min.js"></script>
-                    <script src="../Scripts/scripts.js"></script>
-                    <script src="../Scripts/jquery.validate.min.js"></script>
-                    <script src="../Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/jquery-2.2.0.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/scripts.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

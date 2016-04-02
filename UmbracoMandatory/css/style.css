@@ -1,3 +1,19 @@
+html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
+}
+
+#wrapper {
+	min-height:100%;
+	position:relative;
+}
+
+.content {
+	padding-bottom:50px;
+}
+
 .caret-up {
     width: 0; 
     height: 0; 
@@ -11,6 +27,9 @@
 }
 
 .footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 	text-align:center;
 	padding-top: 15px;
 	

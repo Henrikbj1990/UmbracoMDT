@@ -2,4 +2,59 @@
 @{
     Layout = "Master.cshtml";
 }
-@Umbraco.RenderMacro("MemberList")
+@using Newtonsoft.Json;
+@using Umbraco.Web.Models;
+@{  var memberService = ApplicationContext.Current.Services.MemberService;
+    var members = memberService.GetMembersByGroup("Active");
+    }
+
+<h1>Members</h1>
+<hr>
+	<h3 style="clear:both";>Active Users:</h3>
+		
+@foreach (var member in members)
+{
+	<div class="member">
+        <div class="col-md-2">
+            @if (member.GetValue("photo") != null)
+            {
+                string image = member.GetValue<string>("photo");
+                ImageCropDataSet imageCrops = JsonConvert.DeserializeObject<ImageCropDataSet>(image);
+                string imagePath = imageCrops.Src.GetCropUrl();
+                <img src="@imagePath" style="height:100px;width:auto;" />
+            }
+        </div>
+        <div class="col-md-4">
+            <p>
+                <h4>
+                    @member.GetValue("firstname")
+                    @member.GetValue("lastname")
+                </h4>
+                @member.GetValue("address")<br>
+                @member.GetValue("zip") @member.GetValue("city") <br>
+                Email: @member.Email<br>
+                Skills:
+                @{
+                    String[] skills = member.GetValue("skills").ToString().Split(',');
+                    string skillString =
+                    string.Join(", ", from skill in skills
+                                      select umbraco.library.GetPreValueAsString(Convert.ToInt32(skill)));
+                    <span>@skillString</span>
+                }
+            </p>
+    </div></div>
+				<br>
+
+                    }
+ 
+<h3 style="clear:both">Prospect users:</h3>
+@{ var prospects = memberService.GetMembersByGroup("Prospect");}
+
+@foreach (var prospect in prospects)
+{
+    <div class="col-md-4" style="padding-bottom:5px">
+        @prospect.Name
+        <br />
+        Email: @prospect.Email
+    </div>
+}

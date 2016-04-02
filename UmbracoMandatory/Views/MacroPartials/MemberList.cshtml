@@ -16,7 +16,7 @@
             {
                 string image = member.GetValue<string>("photo");
                 ImageCropDataSet imageCrop = JsonConvert.DeserializeObject<ImageCropDataSet>(image);
-                string imagePath = imageCrop.Src.GetCropUrl();
+                string imagePath = imageCrop.Src.GetCropUrl("profile");
                 <img src="@imagePath "/> <br />
             }
             @member.GetValue("firstname")

@@ -4,14 +4,19 @@
 }
 @{ var newProjects = @Umbraco.Content(1069).Children().Where(("projectStatus.Contains(\"9\")")).OrderBy("CreateDate desc").Take(3);}
 
-<h1>Home</h1>
+<h1>@Umbraco.Field("siteTitle")</h1>
 	<p>@Umbraco.Field("mainContent")</p>
-
+<br>
+	<h4>Here is 3 recently completed projects:</h4>
 	@foreach(var item in newProjects){
-
-		<li>
-			<a href="@item.Url">@item.Name</a>
-		</li>
+		<div class="col-md-4">
+            <div class="well well-sm">
+					<a href="@item.Url">
+						<h4>@item.Name</h4>
+						<p>Created: @item.CreateDate.ToString("MM/dd-yyyy")</p>
+					</a>
+			</div>
+        </div>
 }
 	
 	
